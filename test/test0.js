@@ -8,6 +8,13 @@ var Promise = require("bluebird");
 var chaiAsPromised = require("chai-as-promised");
 chai.use(chaiAsPromised);
 
+
+before(function (done) {
+  server.on("appReady", function(){
+      done();
+  });
+});
+
 describe("trades_test ", function () {
   this.timeout(120 * 1000);
   var testnames = ["Get all trades",

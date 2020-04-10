@@ -4,6 +4,10 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// DB & Models
+const Models = require("./models/index");
+const dbService = require("./services/db");
+
 
 var index = require('./routes/index');
 var erase = require('./routes/erase');
@@ -39,6 +43,8 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+  console.log(err.message);
+  console.log(req.body);
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -47,5 +53,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+dbService().init().then(()=>{
+  app.emit("appReady");
+})
 
 module.exports = app;
